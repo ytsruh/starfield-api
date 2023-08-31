@@ -1,0 +1,8 @@
+.env
+/tmp
+.DS_Store
+
+# Client
+node_modules
+dist/
+.astro/

@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import starfieldStripes from "../assets/starfield_stripes.png";
+---
+
+<Layout title="Welcome to Astro.">
+	<div class="text-center flex-col">
+        <div class="flex justify-center items-center">
+          <div class="py-10 w-2/3">
+            <h1 class="text-4xl">Welcome to the Starfield API</h1>
+            <p class="text-lg py-2">
+              The community resource for all things Starfield. Access a variety of data from the Starfield
+              game & universe in easy to consume formats.
+            </p>
+          </div>
+        </div>
+        <Image src={starfieldStripes} alt="Starfield logo" />
+      </div>
+</Layout>

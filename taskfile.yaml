@@ -1,0 +1,9 @@
+version: "3"
+
+tasks:
+  dev-server:
+    cmds:
+      - go run server.go
+  dev-client:
+    cmds:
+      - cd ../docs && npm run dev

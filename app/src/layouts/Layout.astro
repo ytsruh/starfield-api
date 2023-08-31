@@ -1,0 +1,36 @@
+--- 
+interface Props {
+	title: string;
+}
+import '../styles.css';
+const { title } = Astro.props;
+import { Image } from 'astro:assets';
+import starfieldLogo from "../assets/Starfield_logo_white.png";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description">
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+	</head>
+	<body class="text-zinc-50 bg-zinc-950">
+		<nav class="flex items-center py-5">
+			<Image src={starfieldLogo} height={75} alt="Starfield logo" />
+			<ul class="justify-end w-full flex space-x-5 mx-10">
+			<li>Home</li>
+			<li>Docs</li>
+			<li>About</li>
+			</ul>
+		</nav>
+		<slot />
+	</body>
+</html>
+
