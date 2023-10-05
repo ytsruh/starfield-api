@@ -24,4 +24,10 @@ func SetRoutes(app *fiber.App) {
 	app.Post("/planet", createPlanet)
 	app.Put("/planet/:id", updatePlanet)
 	app.Delete("/planet/:id", deletePlanet)
+	// Moons
+	app.Get("/moon", getMoons)
+	app.Get("/moon/:id", getSingleMoon)
+	app.Post("/moon", createMoon)
+	app.Put("/moon/:id", updateMoon)
+	app.Delete("/moon/:id", deleteMoon)
 }

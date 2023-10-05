@@ -13,6 +13,7 @@ type Planet struct {
 	Name         string         `json:"name" gorm:"unique;not null"`
 	Description  string         `json:"description"`
 	StarSystemID uuid.UUID      `json:"starsystem"`
+	Moons        []Moon         `json:"moons"`
 	CreatedAt    time.Time      `gorm:"autoCreateTime"`
 	UpdatedAt    time.Time      `gorm:"autoUpdateTime"`
 	DeletedAt    gorm.DeletedAt `gorm:"index"`
