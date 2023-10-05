@@ -23,7 +23,7 @@ func Setup() {
 		panic(err)
 	}
 
-	err = db.AutoMigrate(&StarSystem{})
+	err = db.AutoMigrate(&StarSystem{}, Planet{})
 	if err != nil {
 		log.Println(err)
 	}
