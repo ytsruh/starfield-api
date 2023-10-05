@@ -56,5 +56,5 @@ func main() {
 	_ = app.Shutdown()
 	// Your cleanup tasks go here
 	// db.Close()
-	fmt.Println("Fiber was successful shutdown.")
+	fmt.Println("Server was successful shutdown.")
 }
