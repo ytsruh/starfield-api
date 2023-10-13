@@ -4,5 +4,5 @@
 
 # Client
 node_modules
-dist/
-.astro/
+/build
+/.svelte-kit
