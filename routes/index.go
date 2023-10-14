@@ -27,18 +27,28 @@ func jwtError(c *fiber.Ctx, err error) error {
 
 func SetRoutes(app *fiber.App) {
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"message": "Welcome to the Starfield API",
+		// Render index template
+		return c.Render("index", fiber.Map{
+			"PageTitle": "Welcome to the Stafield API",
 		})
 	})
+	app.Get("/login", func(c *fiber.Ctx) error {
+		// Render index template
+		return c.Render("login", fiber.Map{
+			"PageTitle": "Login to the Stafield API",
+		})
+	})
+
 	app.Get("/metrics", monitor.New(monitor.Config{Title: "Live Server Metrics"}))
+	// Create route group and add protection
+	api := app.Group("/api")
 	// Auth
-	app.Post("/auth/register", registerUser)
-	app.Post("/auth/login", loginUser)
-	app.Get("/auth/me", getUser)
+	api.Post("/auth/register", registerUser)
+	api.Post("/auth/login", loginUser)
+	api.Get("/auth/me", getUser)
 
 	// Create route group and add protection
-	v1 := app.Group("/v1", protected())
+	v1 := api.Group("/v1", protected())
 	// Star Systems
 	v1.Get("/starsystem", getStarSystems)
 	v1.Get("/starsystem/:id", getSingleStarSystem)

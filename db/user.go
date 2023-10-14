@@ -13,19 +13,11 @@ type CustomClaims struct {
 	jwt.RegisteredClaims `json:"claims"`
 }
 
-type Role string
-
-const (
-	Admin    Role = "admin"
-	Standard Role = "user"
-)
-
 type User struct {
 	Id       uuid.UUID `json:"id" gorm:"primaryKey;type:uuid;default:gen_random_uuid()"`
 	Name     string    `json:"name"`
 	Email    string    `json:"email"`
 	Password []byte    `json:"password"`
-	Role     Role      `json:"role" gorm:"type:enum('admin', 'user');default:admin"`
 }
 
 func CreateUser(input *User) error {
