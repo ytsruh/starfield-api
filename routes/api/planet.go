@@ -43,7 +43,7 @@ func createPlanet(c *fiber.Ctx) error {
 	}
 	inputData := database.Planet{
 		Name:         input.Name,
-		StarSystemID: input.StarSystemID,
+		StarSystemId: input.StarSystemId,
 	}
 	error := database.CreatePlanet(&inputData)
 	if error != nil {

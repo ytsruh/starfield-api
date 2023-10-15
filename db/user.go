@@ -2,9 +2,11 @@ package database
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type CustomClaims struct {
@@ -14,10 +16,14 @@ type CustomClaims struct {
 }
 
 type User struct {
-	Id       uuid.UUID `json:"id" gorm:"primaryKey;type:uuid;default:gen_random_uuid()"`
-	Name     string    `json:"name"`
-	Email    string    `json:"email"`
-	Password []byte    `json:"password"`
+	Id        uuid.UUID      `json:"id" gorm:"primaryKey;type:uuid;default:gen_random_uuid()"`
+	Name      string         `json:"name"`
+	Email     string         `json:"email"`
+	Password  []byte         `json:"password"`
+	Keys      []APIKey       `json:"apikeys"`
+	CreatedAt time.Time      `gorm:"autoCreateTime"`
+	UpdatedAt time.Time      `gorm:"autoUpdateTime"`
+	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
 
 func CreateUser(input *User) error {
@@ -40,7 +46,7 @@ func GetUserByEmail(email string) (User, error) {
 }
 
 func UpdateUser(user *User) error {
-	tx := db.Save(&user)
+	tx := db.Updates(&user)
 	return tx.Error
 }
 

@@ -30,6 +30,7 @@
       <h1 class="text-2xl py-1">API Keys</h1>
       <h2 class="text-base">Manage your API keys</h2>
     </div>
+    {{if lt (len .Keys) 2}}
     <div class="flex justify-end">
       <label class="btn btn-outline" for="create-key"><i class="gg-math-plus mx-2"></i>Create API Key</label>
       <input class="modal-state" id="create-key" type="checkbox" />
@@ -38,25 +39,29 @@
         <div class="modal-content flex flex-col gap-5">
           <label for="create-key" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
           <h2 class="text-xl">Create new API Key</h2>
-          <form action="">
+          <form action="/dashboard/keys" autocomplete="off" method="post">
             <div class="form-group">
               <div class="form-field">
                 <label class="form-label"> Name </label>
-                <input placeholder="Name your API Key" type="text" class="input max-w-full" />
+                <input placeholder="Name your API Key" type="text" class="input max-w-full" name="name" />
+              </div>
+              <div class="form-field pt-5">
+                <div class="form-control justify-between">
+                  <button type="submit" class="btn bg-blue-600 w-full">Create</button>
+                </div>
               </div>
             </div>
           </form>
-          <div class="flex gap-3">
-            <button class="btn btn-primary btn-block">Create</button>
-          </div>
         </div>
       </div>
     </div>
-    <div class="w-full">
+    {{else}}
+    <div class="w-full py-2">
       <p class="text-xs text-zinc-400 text-right w-full">
         A maximum of 2 API keys can be created at any one time
       </p>
     </div>
-    <div>{{template "partials/apikey" .}}</div>
+    {{end}}
+    <div>{{range .Keys}} {{template "partials/apikey" .}} {{end}}</div>
   </div>
 </div>

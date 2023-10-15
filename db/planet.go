@@ -12,7 +12,7 @@ type Planet struct {
 	ID           uuid.UUID      `json:"id" gorm:"primaryKey;type:uuid;default:gen_random_uuid()"`
 	Name         string         `json:"name" gorm:"unique;not null"`
 	Description  string         `json:"description"`
-	StarSystemID uuid.UUID      `json:"starsystem"`
+	StarSystemId uuid.UUID      `json:"starsystem"`
 	Moons        []Moon         `json:"moons"`
 	CreatedAt    time.Time      `gorm:"autoCreateTime"`
 	UpdatedAt    time.Time      `gorm:"autoUpdateTime"`
