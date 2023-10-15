@@ -1,4 +1,4 @@
-package routes
+package api
 
 import (
 	"fmt"
@@ -8,47 +8,47 @@ import (
 	database "starfieldapi.com/db"
 )
 
-func getPlanets(c *fiber.Ctx) error {
-	planets, err := database.GetAllPlanets()
+func getMoons(c *fiber.Ctx) error {
+	moons, err := database.GetAllMoons()
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": "An error occurred",
 		})
 	}
 	return c.JSON(fiber.Map{
-		"data": planets,
+		"data": moons,
 	})
 }
 
-func getSinglePlanet(c *fiber.Ctx) error {
+func getSingleMoon(c *fiber.Ctx) error {
 	param := c.Params("id")
-	planet, err := database.GetPlanet(param)
+	moon, err := database.GetMoon(param)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": "An error occurred",
 		})
 	}
 	return c.JSON(fiber.Map{
-		"data": planet,
+		"data": moon,
 	})
 }
 
-func createPlanet(c *fiber.Ctx) error {
-	input := new(database.Planet)
+func createMoon(c *fiber.Ctx) error {
+	input := new(database.Moon)
 
 	if err := c.BodyParser(input); err != nil {
 		return c.JSON(fiber.Map{
 			"message": "failed to parse request body",
 		})
 	}
-	inputData := database.Planet{
-		Name:         input.Name,
-		StarSystemID: input.StarSystemID,
+	inputData := database.Moon{
+		Name:     input.Name,
+		PlanetId: input.PlanetId,
 	}
-	error := database.CreatePlanet(&inputData)
+	error := database.CreateMoon(&inputData)
 	if error != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "could not create new planet" + error.Error(),
+			"message": "could not create new moon" + error.Error(),
 		})
 	}
 	return c.Status(200).JSON(fiber.Map{
@@ -57,8 +57,8 @@ func createPlanet(c *fiber.Ctx) error {
 	})
 }
 
-func updatePlanet(c *fiber.Ctx) error {
-	input := new(database.Planet)
+func updateMoon(c *fiber.Ctx) error {
+	input := new(database.Moon)
 	id, parseErr := uuid.Parse(c.Params("id"))
 	if parseErr != nil {
 		return c.JSON(fiber.Map{
@@ -73,7 +73,7 @@ func updatePlanet(c *fiber.Ctx) error {
 	}
 	input.ID = id
 
-	err := database.UpdatePlanet(input)
+	err := database.UpdateMoon(input)
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"message": "An error occurred",
@@ -85,9 +85,9 @@ func updatePlanet(c *fiber.Ctx) error {
 	})
 }
 
-func deletePlanet(c *fiber.Ctx) error {
+func deleteMoon(c *fiber.Ctx) error {
 	param := c.Params("id")
-	err := database.DeletePlanet(param)
+	err := database.DeleteMoon(param)
 	if err != nil {
 		fmt.Println(err)
 		return c.JSON(fiber.Map{

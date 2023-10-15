@@ -1,0 +1,45 @@
+<div class="navbar">
+  <div class="navbar-start">
+    <a class="navbar-item" href="/">
+      <img src="/static/img/starfield_logo.svg" class="h-16 w-32" alt="Starfield logo" />
+    </a>
+  </div>
+  <div class="navbar-end hidden sm:flex">
+    <a href="/" class="navbar-item hover:text-gray-500">Home</a>
+    <a href="/docs" class="navbar-item hover:text-gray-500">About</a>
+    <a href="/login" class="btn btn-outline">Login</a>
+  </div>
+  <div class="navbar-end sm:hidden flex cursor-pointer mx-5" id="navbar-icon">
+    <div class="navbar-item">
+      <i id="menu-icon" class="gg-menu"></i>
+    </div>
+  </div>
+</div>
+<div class="hidden text-center navbar gap-y-5" id="navbar-mobile">
+  <a href="/" class="hover:text-gray-500">Home</a>
+  <a href="/docs" class="hover:text-gray-500">Docs</a>
+  <a href="/login" class="btn btn-outline">Login</a>
+</div>
+
+<script>
+  const navbarIcon = document.getElementById("navbar-icon");
+
+  navbarIcon.addEventListener("click", () => {
+    // Toggle the mobile Nav
+    const mobileNav = document.getElementById("navbar-mobile");
+    mobileNav.classList.toggle("hidden");
+    mobileNav.classList.toggle("flex");
+    mobileNav.classList.toggle("flex-col");
+    // Change the Icon
+    const menuIcon = navbarIcon.getElementsByTagName("i")[0];
+    menuIcon.classList.toggle("gg-menu");
+    menuIcon.classList.toggle("gg-close");
+  });
+
+  window.onresize = (event) => {
+    if (event.target.innerWidth >= 640) {
+      const mobileNav = document.getElementById("navbar-mobile");
+      mobileNav.classList.add("hidden");
+    }
+  };
+</script>

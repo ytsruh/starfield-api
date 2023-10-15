@@ -1,0 +1,50 @@
+<div class="w-full md:hidden flex justify-center items-center my-5">
+  <div class="btn-group btn-group-scrollable">
+    <a class="btn" href="/dashboard">Account</a>
+    <a class="btn" href="/dashboard/keys">API Keys</a>
+  </div>
+</div>
+<div class="flex my-5 mx-2 md:mx-14 lg:mx-32 xl:mx-40">
+  <div class="hidden md:flex md:w-1/4">
+    <nav class="menu py-5 px-3 rounded-md">
+      <section class="menu-section">
+        <ul class="menu-items">
+          <a href="/dashboard">
+            <li class="menu-item">
+              <i class="gg-profile"></i>
+              Account
+            </li>
+          </a>
+          <a href="/dashboard/keys">
+            <li class="menu-item">
+              <i class="gg-keyhole"></i>
+              API Keys
+            </li>
+          </a>
+        </ul>
+      </section>
+    </nav>
+  </div>
+  <div class="w-full md:w-3/4 p-5">
+    <div class="px-2">
+      <h1 class="text-2xl py-1">Your Account</h1>
+      <h2 class="text-base">Update your account details</h2>
+    </div>
+    <form class="form-group flex flex-col w-full py-5">
+      <div class="form-field">
+        <label class="form-label">Name</label>
+        <input value="" type="text" class="input input-solid max-w-full" />
+      </div>
+      <div class="form-field">
+        <label class="form-label">Email</label>
+        <input disabled type="email" class="input input-solid max-w-full" />
+        <label class="form-label">
+          <span class="form-label-alt">Email address cannot be updated</span>
+        </label>
+      </div>
+      <div class="flex justify-end">
+        <button type="submit" class="btn btn-outline">Update</button>
+      </div>
+    </form>
+  </div>
+</div>

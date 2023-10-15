@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func PrintJSON(data interface{}) {
@@ -22,4 +24,10 @@ func GetSecretKey() string {
 		log.Fatal("SECRET_KEY environment variable is not set")
 	}
 	return secretKey
+}
+
+type CustomClaims struct {
+	User                 string `json:"user"`
+	Id                   string `json:"id"`
+	jwt.RegisteredClaims `json:"claims"`
 }

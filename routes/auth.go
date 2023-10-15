@@ -10,67 +10,78 @@ import (
 	"starfieldapi.com/lib"
 )
 
-type CustomClaims struct {
-	User                 string `json:"user"`
-	Id                   string `json:"id"`
-	jwt.RegisteredClaims `json:"claims"`
-}
-
 func registerUser(c *fiber.Ctx) error {
-	var data map[string]string
-	if err := c.BodyParser(&data); err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "issue getting input data",
+	type Payload struct {
+		Name     string `json:"name" xml:"name" form:"name"`
+		Email    string `json:"email" xml:"email" form:"email"`
+		Password string `json:"password" xml:"password" form:"password"`
+	}
+	var payload Payload
+	if err := c.BodyParser(&payload); err != nil {
+		c.Status(500)
+		return c.Render("register", fiber.Map{
+			"Message": "There was an error with the form",
 		})
 	}
-	password, err := bcrypt.GenerateFromPassword([]byte(data["password"]), 14)
+	password, err := bcrypt.GenerateFromPassword([]byte(payload.Password), 14)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "issue creating password",
+		c.Status(500)
+		return c.Render("register", fiber.Map{
+			"Message": "There was issue creating your password",
 		})
 	}
 	user := database.User{
-		Name:     data["name"],
-		Email:    data["email"],
+		Name:     payload.Name,
+		Email:    payload.Email,
 		Password: password,
 	}
 	error := database.CreateUser(&user)
 	if error != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "could not create new url" + error.Error(),
+		c.Status(500)
+		return c.Render("register", fiber.Map{
+			"Message": "There was error creating your account",
 		})
 	}
-
-	return c.JSON(user)
+	c.Status(200)
+	return c.Render("login", fiber.Map{
+		"Message": "Success",
+	})
 }
 
 func loginUser(c *fiber.Ctx) error {
-	var data map[string]string
-	if err := c.BodyParser(&data); err != nil {
-		return err
+	type Payload struct {
+		Email    string `json:"email" xml:"email" form:"email"`
+		Password string `json:"password" xml:"password" form:"password"`
+	}
+	var payload Payload
+	if err := c.BodyParser(&payload); err != nil {
+		c.Status(500)
+		return c.Render("login", fiber.Map{
+			"Message": "There was an error with the form",
+		})
 	}
 
-	user, err := database.GetUserByEmail(data["email"])
+	user, err := database.GetUserByEmail(payload.Email)
 	if user.Email == "" || err != nil {
-		c.Status(fiber.StatusNotFound)
-		return c.JSON(fiber.Map{
-			"message": "user not found",
+		c.Status(401)
+		return c.Render("login", fiber.Map{
+			"Message": "User not found",
 		})
 	}
 
-	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(data["password"])); err != nil {
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
-			"message": "incorrect password",
+	if err := bcrypt.CompareHashAndPassword(user.Password, []byte(payload.Password)); err != nil {
+		c.Status(401)
+		return c.Render("login", fiber.Map{
+			"Message": "Incorrect password provided",
 		})
 	}
 
-	claims := CustomClaims{
-		user.Email,
-		user.Id.String(),
-		jwt.RegisteredClaims{
+	claims := lib.CustomClaims{
+		User: user.Email,
+		Id:   user.Id.String(),
+		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
-			Issuer:    "search-engine",
+			Issuer:    "starfield-api",
 		},
 	}
 
@@ -81,30 +92,32 @@ func loginUser(c *fiber.Ctx) error {
 	secretKey := lib.GetSecretKey()
 	signedToken, err := token.SignedString([]byte(secretKey))
 	if err != nil {
-		c.Status(fiber.StatusInternalServerError)
-		return c.JSON(fiber.Map{
-			"message": "could not login",
+		c.Status(500)
+		return c.Render("login", fiber.Map{
+			"Message": "Something went wrong logging in, please try again.",
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"success": true,
-		"token":   signedToken,
-	})
+	// Create and set the cookie
+	cookie := fiber.Cookie{
+		Name:     "auth",
+		Value:    signedToken,
+		Expires:  time.Now().Add(time.Hour * 24),
+		HTTPOnly: true, // Meant only for the server
+	}
+	c.Cookie(&cookie)
+
+	return c.Redirect("/dashboard")
 }
 
-func getUser(c *fiber.Ctx) error {
-	details := c.Locals("user").(*CustomClaims) // Get local context & type assertion to custom claims struct
-	user, err := database.GetUserByEmail(details.User)
-	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "failed to look up user",
-		})
+func logoutUser(c *fiber.Ctx) error {
+	// Create & set new cookie with expired date
+	cookie := fiber.Cookie{
+		Name:     "auth",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true, // Meant only for the server
 	}
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "success",
-		"email":   user.Email,
-		"id":      user.Id,
-		"name":    user.Name,
-	})
+	c.Cookie(&cookie)
+	return c.Redirect("/login")
 }

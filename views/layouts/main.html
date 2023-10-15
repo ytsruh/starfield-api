@@ -7,11 +7,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet" />
     <title>{{.PageTitle}}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/rippleui@1.12.1/dist/css/styles.css" />
+    <link href="https://cdn.jsdelivr.net/npm/css.gg/icons/icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="/static/output.css" />
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon" />
   </head>
-  <body class="text-zinc-50 bg-zinc-950">
-    {{embed}}
-    <script src="/static/preline/preline.js"></script>
+  <body class="text-zinc-50 bg-zinc-950 min-h-screen">
+    {{if .LoggedIn}} {{template "partials/appnav" .}} {{else}} {{template "partials/nav" .}} {{end}} {{embed}}
     <script src="/static/htmx.js"></script>
   </body>
 </html>
