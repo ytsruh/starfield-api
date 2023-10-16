@@ -1,6 +1,8 @@
 package dashboard
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
@@ -139,6 +141,20 @@ func Setup(app *fiber.App) {
 			return c.Redirect("/500")
 		}
 		return c.Redirect("/dashboard/keys")
+	})
+
+	dash.Delete("/keys/:id", func(c *fiber.Ctx) error {
+		id := c.Params("id")
+		fmt.Println("ID: ", id)
+		err := database.DeleteKey(id)
+		if err != nil {
+			fmt.Println(err)
+			c.Append("HX-Redirect", "/500") // HTMX: Append this header to redirect due to error
+			return c.SendStatus(500)
+		}
+		c.Append("HX-Refresh", "true") // HTMX: Append this header to force a page refresh after successful delete
+		return c.SendStatus(200)
+
 	})
 
 }

@@ -62,6 +62,29 @@
       </p>
     </div>
     {{end}}
-    <div>{{range .Keys}} {{template "partials/apikey" .}} {{end}}</div>
+    <div>
+      {{if eq (len .Keys) 0}}
+      <h2 class="py-5 text-center">You have not created any API Keys yet</h2>
+      {{else}} {{range .Keys}} {{template "partials/apikey" .}} {{end}}
+    </div>
+    {{end}}
   </div>
 </div>
+<script>
+  const clipboardButtons = document.getElementsByClassName("clipboard-btn");
+  for (let i = 0; i < clipboardButtons.length; i++) {
+    const element = clipboardButtons[i];
+    element.addEventListener("click", async function (event) {
+      // Copy the Key to clipboard
+      await navigator.clipboard.writeText(element.id);
+      // Alert user
+      let div = document.createElement("div");
+      div.setAttribute("class", "flex justify-center items-center text-5xl");
+      div.textContent = "Copied to clipboard";
+      element.after(div);
+      setTimeout(() => {
+        div.remove();
+      }, 3000);
+    });
+  }
+</script>

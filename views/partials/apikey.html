@@ -13,21 +13,27 @@
     <div class="flex justify-between my-5">
       <div class="flex gap-5">
         <button class="btn">Update</button>
-        <div id="copy-key" class="btn bg-zinc-50 text-zinc-950"><i class="gg-copy"></i></div>
+        <span id="{{.Key}}" class="clipboard-btn btn bg-zinc-50 text-zinc-950">
+          <i class="gg-copy"></i>
+        </span>
       </div>
-      <label class="btn btn-error" for="delete-key"><i class="gg-trash"></i></label>
-      <input class="modal-state" id="delete-key" type="checkbox" />
+      <label class="btn btn-error" for="delete-key-{{.ID}}"><i class="gg-trash"></i></label>
+      <input class="modal-state" id="delete-key-{{.ID}}" type="checkbox" />
       <div class="modal">
-        <label class="modal-overlay" for="delete-key"></label>
+        <label class="modal-overlay" for="delete-key-{{.ID}}"></label>
         <div class="modal-content flex flex-col gap-5">
-          <label for="delete-key" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+          <label for="delete-key-{{.ID}}" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >✕</label
+          >
           <h2 class="text-xl">Confirm key deletion</h2>
-          <span class="text-base text-zinc-400"
+          <span class="text-base text-zinc-400" id="delete-content"
             >Warning. You are about to delete this API key. Once confirmed, this cannot be undone. The key
             will be deleted and will not function. Please confirm you wish to delete this API key.</span
           >
           <div class="flex gap-3">
-            <button class="btn btn-error btn-error">Delete</button>
+            <button hx-delete="/dashboard/keys/{{.ID}}" hx-swap="afterend" class="btn btn-error btn-error">
+              Delete
+            </button>
           </div>
         </div>
       </div>
