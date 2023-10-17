@@ -1,7 +1,7 @@
 version: "3"
 
 tasks:
-  dev:
+  start:
     cmds:
       - go run server.go
   tailwind:

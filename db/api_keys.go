@@ -35,8 +35,16 @@ func GetKeysByUser(id string) ([]APIKey, error) {
 	var keys []APIKey
 	tx := db.Where("user_id = ?", ownerId).Find(&keys)
 	if tx.Error != nil {
-		fmt.Print(tx.Error)
 		return []APIKey{}, tx.Error
+	}
+	return keys, nil
+}
+
+func GetAllKeys() ([]string, error) {
+	var keys []string
+	result := db.Table("api_keys").Select("Key").Find(&keys)
+	if result.Error != nil {
+		return nil, result.Error
 	}
 	return keys, nil
 }
