@@ -3,16 +3,16 @@
     <div class="form-group">
       <div class="form-field">
         <label class="form-label">Name</label>
-        <input type="text" class="input max-w-full" value="{{.Name}}" />
+        <input type="text" class="input max-w-full name-field" value="{{.Name}}" name="name" />
       </div>
       <div class="form-field">
         <label class="form-label">Key</label>
-        <input disabled type="text" value="{{.Key}}" class="input max-w-full" />
+        <input disabled type="text" value="{{.Key}}" name="key" class="input max-w-full" />
       </div>
     </div>
     <div class="flex justify-between my-5">
       <div class="flex gap-5">
-        <button class="btn">Update</button>
+        <button type="submit" class="btn" hx-put="/dashboard/keys/{{.ID}}">Update</button>
         <span id="{{.Key}}" class="clipboard-btn btn bg-zinc-50 text-zinc-950">
           <i class="gg-copy"></i>
         </span>

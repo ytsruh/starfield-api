@@ -143,9 +143,35 @@ func Setup(app *fiber.App) {
 		return c.Redirect("/dashboard/keys")
 	})
 
+	dash.Put("/keys/:id", func(c *fiber.Ctx) error {
+		type Payload struct {
+			Name string
+		}
+		var payload Payload
+		if err := c.BodyParser(&payload); err != nil {
+			c.Status(500)
+			return c.Redirect("/500")
+		}
+		id, err := uuid.Parse(c.Params("id"))
+		if err != nil {
+			c.Append("HX-Redirect", "/500") // HTMX: Append this header to redirect due to error
+			return c.SendStatus(500)
+		}
+		updatedAPIKey := database.APIKey{
+			ID:   id,
+			Name: payload.Name,
+		}
+		updateErr := database.UpdateKey(&updatedAPIKey)
+		if updateErr != nil {
+			c.Append("HX-Redirect", "/500") // HTMX: Append this header to redirect due to error
+			return c.SendStatus(500)
+		}
+		c.Append("HX-Refresh", "true") // HTMX: Append this header to force a page refresh after successful update
+		return c.SendStatus(200)
+	})
+
 	dash.Delete("/keys/:id", func(c *fiber.Ctx) error {
 		id := c.Params("id")
-		fmt.Println("ID: ", id)
 		err := database.DeleteKey(id)
 		if err != nil {
 			fmt.Println(err)
