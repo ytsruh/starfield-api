@@ -40,31 +40,3 @@ func GetPlanet(id string) (Planet, error) {
 	}
 	return planet, nil
 }
-
-// Create
-func CreatePlanet(input *Planet) error {
-	tx := db.Create(input)
-	if tx.Error != nil {
-		fmt.Print(tx.Error)
-		return tx.Error
-	}
-	return nil
-}
-
-// Update
-func UpdatePlanet(planet *Planet) error {
-	tx := db.Save(&planet)
-	return tx.Error
-}
-
-// Delete
-func DeletePlanet(id string) error {
-	deleteId, err := uuid.Parse(id)
-	if err != nil {
-		return err
-	}
-	// Unscoped is for a full delete instead of a soft delete
-	//tx := db.Unscoped().Delete(&Planet{}, id)
-	tx := db.Delete(&Planet{}, deleteId)
-	return tx.Error
-}

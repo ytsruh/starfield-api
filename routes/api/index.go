@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/gofiber/fiber/v2"
 	"golang.org/x/exp/slices"
@@ -17,7 +16,11 @@ func Setup(app *fiber.App) {
 		// Get all keys from database
 		keys, err := database.GetAllKeys()
 		if err != nil {
-			return c.SendStatus(500)
+			c.Status(500)
+			return c.JSON(fiber.Map{
+				"success": false,
+				"message": "internal error",
+			})
 		}
 		// Find the API Key in the request
 		requestKey, reqErr := getKeyFromRequest(c)
@@ -53,9 +56,11 @@ func Setup(app *fiber.App) {
 }
 
 func createRequestLog(ctx *fiber.Ctx, key string) {
-	path := ctx.Path()
-	fmt.Println("Path:" + path)
-	fmt.Println("Key:" + key)
+	newLog := database.RequestLog{
+		Path: ctx.Path(),
+		Key:  key,
+	}
+	newLog.Create()
 }
 
 func getKeyFromRequest(ctx *fiber.Ctx) (string, error) {
