@@ -25,6 +25,12 @@ func SetRoutes(app *fiber.App) {
 		})
 	})
 
+	app.Get("/about", func(c *fiber.Ctx) error {
+		return c.Render("about", fiber.Map{
+			"PageTitle": "About the project and additional information",
+		})
+	})
+
 	app.Get("/register", func(c *fiber.Ctx) error {
 		return c.Render("register", fiber.Map{
 			"PageTitle": "Register for the Stafield API",
