@@ -79,7 +79,7 @@
       await navigator.clipboard.writeText(element.id);
       // Alert user
       let div = document.createElement("div");
-      div.setAttribute("class", "flex justify-center items-center text-5xl");
+      div.setAttribute("class", "flex justify-center items-center");
       div.textContent = "Copied to clipboard";
       element.after(div);
       setTimeout(() => {

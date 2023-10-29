@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/gofiber/contrib/swagger"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"starfieldapi.com/routes/api"
@@ -8,11 +9,22 @@ import (
 )
 
 func SetRoutes(app *fiber.App) {
+	// Setup & use Swagger for documentation
+	app.Use(swagger.New(swagger.Config{
+		Next:     nil,
+		BasePath: "/",
+		FilePath: "./swagger.json",
+		Path:     "docs",
+		Title:    "Starfield API documentation",
+		CacheAge: 3600,
+	}))
+
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Render("index", fiber.Map{
 			"PageTitle": "Welcome to the Stafield API",
 		})
 	})
+
 	app.Get("/register", func(c *fiber.Ctx) error {
 		return c.Render("register", fiber.Map{
 			"PageTitle": "Register for the Stafield API",

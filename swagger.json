@@ -1,0 +1,67 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Welcome to the Starfield API documentation. Find out how to access the various endpoints available on the API.",
+    "title": "Starfield API Documentation"
+  },
+  "host": "starfieldapi.com",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "Star System",
+      "description": "Star systems are collections of planets, moons and locations"
+    },
+    {
+      "name": "Planet",
+      "description": "Planets reside within a star system and can have moons or locations"
+    },
+    {
+      "name": "Moon",
+      "description": "Moons reside around a planet and can locations"
+    }
+  ],
+  "paths": {
+    "/starsystem": {
+      "get": {
+        "tags": ["Star System"],
+        "summary": "Get all star systems",
+        "produces": ["application/json"]
+      }
+    },
+    "/starsystem/{id}": {
+      "get": {
+        "tags": ["Star System"],
+        "summary": "Get a single system by ID",
+        "produces": ["application/json"]
+      }
+    },
+    "/planet": {
+      "get": {
+        "tags": ["Planet"],
+        "summary": "Get all planets",
+        "produces": ["application/json"]
+      }
+    },
+    "/planet/{id}": {
+      "get": {
+        "tags": ["Planet"],
+        "summary": "Get a planet by ID",
+        "produces": ["application/json"]
+      }
+    },
+    "/moon": {
+      "get": {
+        "tags": ["Moon"],
+        "summary": "Get all moons",
+        "produces": ["application/json"]
+      }
+    },
+    "/moon/{id}": {
+      "get": {
+        "tags": ["Moon"],
+        "summary": "Get a moon by ID",
+        "produces": ["application/json"]
+      }
+    }
+  }
+}

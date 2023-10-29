@@ -67,7 +67,7 @@ func getKeyFromRequest(ctx *fiber.Ctx) (string, error) {
 	headers := ctx.GetReqHeaders()
 	headerToken := headers["Api-Key"]
 	if len(headerToken) > 0 {
-		return headerToken, nil
+		return headerToken[0], nil
 	}
 	queryToken := ctx.Query("apikey")
 	if len(queryToken) > 0 {

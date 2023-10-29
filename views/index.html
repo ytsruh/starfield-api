@@ -1,8 +1,8 @@
 <div class="text-center flex-col">
   <div class="flex justify-center items-center">
     <div class="py-10 w-2/3">
-      <h1 class="text-4xl">Welcome to the Starfield API</h1>
-      <p class="text-lg py-2">
+      <h1 class="text-4xl py-5">Welcome to the Starfield API</h1>
+      <p class="text-lg">
         The community resource for all things Starfield. Access a variety of data from across the Settled
         Systems in easy to consume formats.
       </p>
@@ -11,5 +11,47 @@
   <img src="/static/img/starfield_stripes.png" alt="Starfield logo" />
 </div>
 <div class="text-center flex-col py-10">
-  <h2 class="text-2xl">Access & Documentation Coming Soon</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 border-b-2">
+    <div class="my-5 mx-10">
+      <h2 class="text-2xl pb-2">Get Started</h2>
+      <p class="py-2">
+        To get started you must have an API key. To generate an API key,
+        <a class="text-blue-600" href="/register">register</a> for an account and create one inside the
+        dashboard.
+      </p>
+      <p class="py-2">Upto 2 API keys can be created and deleted for security and easy management.</p>
+    </div>
+    <div class="my-5 mx-10">
+      <h2 class="text-2xl pb-2">Documentation</h2>
+      <p class="py-2">
+        After you've created an API key you can visit our
+        <a class="text-blue-600" href="/docs">documentation</a> to find the available endpoints and base url.
+        Your api key can be included in either the request headers or as a query string.
+      </p>
+    </div>
+  </div>
+  <h2 class="text-center text-2xl py-5">Available Data</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5">
+    <div class="border border-zinc-400 p-5 rounded-md flex flex-col gap-2">
+      <img
+        class="h-40 object-cover"
+        src="/static/img/example-system.webp"
+        alt="Example of a Starfield star system" />
+      <h3 class="text-xl">Star Systems</h3>
+      <p>Star systems are collections of planets, moons and locations</p>
+    </div>
+    <div class="border border-zinc-400 p-5 rounded-md flex flex-col gap-2">
+      <img
+        class="h-40 object-cover"
+        src="/static/img/example-planet.jpeg"
+        alt="Example of a Starfield planet" />
+      <h3 class="text-xl">Planets</h3>
+      <p>Planets reside within a star system and can have moons or locations</p>
+    </div>
+    <div class="border border-zinc-400 p-5 rounded-md flex flex-col gap-2">
+      <img class="h-40 object-cover" src="/static/img/example-moon.jpeg" alt="Example of a Starfield moon" />
+      <h3 class="text-xl">Moons</h3>
+      <p>Moons reside around a planet and can locations</p>
+    </div>
+  </div>
 </div>
