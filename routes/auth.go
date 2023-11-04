@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -35,12 +36,16 @@ func registerUser(c *fiber.Ctx) error {
 		Email:    payload.Email,
 		Password: password,
 	}
-	error := database.CreateUser(&user)
-	if error != nil {
+	createErr := database.CreateUser(&user)
+	if createErr != nil {
 		c.Status(500)
 		return c.Render("register", fiber.Map{
 			"Message": "There was error creating your account",
 		})
+	}
+	emailErr := lib.EmailCreateUser(payload.Email)
+	if emailErr != nil {
+		fmt.Print(emailErr)
 	}
 	c.Status(200)
 	return c.Render("login", fiber.Map{
@@ -119,5 +124,105 @@ func logoutUser(c *fiber.Ctx) error {
 		HTTPOnly: true, // Meant only for the server
 	}
 	c.Cookie(&cookie)
+	return c.Redirect("/login")
+}
+
+func requestPasswordReset(c *fiber.Ctx) error {
+	type Payload struct {
+		Email string `json:"email" xml:"email" form:"email"`
+	}
+	var payload Payload
+	if err := c.BodyParser(&payload); err != nil {
+		c.Status(500)
+		return c.Render("requestreset", fiber.Map{
+			"Message": "There was an error with the form",
+		})
+	}
+	reset := database.PasswordReset{
+		Email: payload.Email,
+	}
+
+	createErr := database.NewPasswordReset(&reset)
+
+	if createErr != nil {
+		c.Status(500)
+		return c.Render("requestreset", fiber.Map{
+			"Message": "There was error resetting your password",
+		})
+	}
+
+	lib.EmailPasswordResetLink(reset.Id.String())
+
+	c.Status(200)
+	return c.Render("requestreset", fiber.Map{
+		"Message": "Success. An Email will be sent with a link to reset your password",
+	})
+}
+
+func resetPassword(c *fiber.Ctx) error {
+	type Payload struct {
+		ResetId         string `json:"resetid" xml:"resetid" form:"resetid"`
+		NewPassword     string `json:"newpassword" xml:"newpassword" form:"newpassword"`
+		ConfirmPassword string `json:"confirmpassword" xml:"confirmpassword" form:"confirmpassword"`
+	}
+	var payload Payload
+	if err := c.BodyParser(&payload); err != nil {
+		c.Status(500)
+		return c.Render("resetpassword", fiber.Map{
+			"Message": "There was an error with the form",
+			"Reset": fiber.Map{
+				"Id": payload.ResetId,
+			},
+		})
+	}
+
+	if payload.NewPassword != payload.ConfirmPassword {
+		c.Status(500)
+		return c.Render("resetpassword", fiber.Map{
+			"Message": "The passwords do not match",
+			"Reset": fiber.Map{
+				"Id": payload.ResetId,
+			},
+		})
+	}
+
+	reset, resetErr := database.GetPasswordReset(payload.ResetId)
+	if resetErr != nil {
+		c.Status(500)
+		return c.Render("resetpassword", fiber.Map{
+			"Error": "Error: Password reset request not found",
+			"Reset": fiber.Map{
+				"Id": payload.ResetId,
+			},
+		})
+	}
+
+	password, passwordErr := bcrypt.GenerateFromPassword([]byte(payload.NewPassword), 14)
+	if passwordErr != nil {
+		c.Status(500)
+		return c.Render("resetpassword", fiber.Map{
+			"Error": "Error: There was issue creating your new password",
+			"Reset": fiber.Map{
+				"Id": payload.ResetId,
+			},
+		})
+	}
+
+	user := database.User{
+		Email:    reset.Email,
+		Password: password,
+	}
+
+	updateErr := database.UpdateUserPassword(&user)
+	if updateErr != nil {
+		c.Status(500)
+		return c.Render("resetpassword", fiber.Map{
+			"Error": "Error: There was issue updating your new password",
+			"Reset": fiber.Map{
+				"Id": payload.ResetId,
+			},
+		})
+	}
+
 	return c.Redirect("/login")
 }
