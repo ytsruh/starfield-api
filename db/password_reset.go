@@ -34,3 +34,14 @@ func GetPasswordReset(id string) (PasswordReset, error) {
 	}
 	return passwordReset, nil
 }
+
+func DeletePasswordReset(id string) error {
+	deleteId, err := uuid.Parse(id)
+	if err != nil {
+		return err
+	}
+	// Unscoped is for a full delete instead of a soft delete
+	//tx := db.Unscoped().Delete(&User{}, id)
+	tx := db.Delete(&PasswordReset{}, deleteId)
+	return tx.Error
+}

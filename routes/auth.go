@@ -151,7 +151,7 @@ func requestPasswordReset(c *fiber.Ctx) error {
 		})
 	}
 
-	lib.EmailPasswordResetLink(reset.Id.String())
+	lib.EmailPasswordResetLink(reset.Id.String(), payload.Email)
 
 	c.Status(200)
 	return c.Render("requestreset", fiber.Map{
@@ -222,6 +222,11 @@ func resetPassword(c *fiber.Ctx) error {
 				"Id": payload.ResetId,
 			},
 		})
+	}
+
+	deleteErr := database.DeletePasswordReset(string(reset.Id.String()))
+	if deleteErr != nil {
+		fmt.Println("Password reset was not deleted: " + reset.Id.String())
 	}
 
 	return c.Redirect("/login")
