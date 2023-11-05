@@ -12,12 +12,22 @@
     <link rel="stylesheet" href="/static/output.css" />
     <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon" />
   </head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1LT9TT12X9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-1LT9TT12X9");
+  </script>
   <body class="text-zinc-50 bg-zinc-950 min-h-screen">
     {{if .LoggedIn}} {{template "partials/appnav" .}} {{else}} {{template "partials/nav" .}} {{end}} {{embed}}
     <script
       src="https://unpkg.com/htmx.org@1.9.6"
       integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous"></script>
   </body>
 </html>

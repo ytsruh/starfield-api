@@ -1,0 +1,43 @@
+<div class="flex h-full items-center justify-center py-16">
+  <div class="mt-7 border border-zinc-200 rounded-xl shadow-sm">
+    <div class="p-4 sm:p-7">
+      <div class="text-center">
+        <h1 class="block text-2xl font-bold text-zinc-50 pb-5">Request Password Reset</h1>
+      </div>
+
+      <div class="my-5">
+        <!-- Form -->
+        <form action="/request-reset" autocomplete="off" method="post">
+          <div class="grid gap-y-4">
+            <!-- Form Group -->
+            <div>
+              <label for="email" class="block text-sm mb-2">Email address</label>
+              <div class="relative">
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="py-3 px-4 block w-full rounded-md text-sm bg-zinc-800 border-zinc-700 text-zinc-400 focus:ring-zinc-500 focus:border-zinc-500"
+                  required
+                />
+              </div>
+            </div>
+            <!-- End Form Group -->
+              <button
+                type="submit"
+                data-loading-disable
+                class="my-5 py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-zinc-50 text-zinc-950 w-full"
+              >
+                Sign in
+              </button>
+            </div>
+          </div>
+        </form>
+        <!-- End Form -->
+        {{if .Message}}
+        <h1 class="text-zinc-50 bg-blue-600 p-5 text-center rounded-md">{{.Message}}</h1>
+        {{end}}
+      </div>
+    </div>
+  </div>
+</div>

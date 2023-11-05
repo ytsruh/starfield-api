@@ -50,6 +50,11 @@ func UpdateUser(user *User) error {
 	return tx.Error
 }
 
+func UpdateUserPassword(user *User) error {
+	tx := db.Model(&User{}).Where("email = ?", user.Email).Update("password", user.Password)
+	return tx.Error
+}
+
 func DeleteUser(id string) error {
 	deleteId, err := uuid.Parse(id)
 	if err != nil {

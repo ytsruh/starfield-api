@@ -23,7 +23,7 @@ func Setup() {
 		panic(err)
 	}
 
-	err = db.AutoMigrate(&StarSystem{}, &Planet{}, &Moon{}, &User{}, &APIKey{}, &RequestLog{})
+	err = db.AutoMigrate(&StarSystem{}, &Planet{}, &Moon{}, &User{}, &APIKey{}, &RequestLog{}, &PasswordReset{})
 	if err != nil {
 		log.Println(err)
 	}
